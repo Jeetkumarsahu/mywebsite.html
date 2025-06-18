@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice & Gesture System - Jeet Kumar Sahu</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/a/ACg8ocJi2rN5dclE1e7VDs3E_l53NI7ybZ3Z9mf78WpX_wz6tOQ3D9IU=s332-c-no" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float-particles 6s infinite ease-in-out;
+        }
+
+        @keyframes float-particles {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-30px) translateX(20px);
+                opacity: 1;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            margin-top: 80px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #00ffff;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 30px #00ffff;
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+            font-weight: bold;
+        }
+
+        @keyframes glow-pulse {
+            from {
+                text-shadow: 
+                    0 0 10px #00ffff,
+                    0 0 20px #00ffff,
+                    0 0 30px #00ffff;
+            }
+            to {
+                text-shadow: 
+                    0 0 15px #00ffff,
+                    0 0 25px #00ffff,
+                    0 0 40px #00ffff;
+            }
+        }
+
+        .hero-content .tagline {
+            font-size: 1.3rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ffff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-top: 5px;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            font-weight: bold;
+        }
+
+        /* Overview Section */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .overview-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .overview-visual {
+            text-align: center;
+            font-size: 8rem;
+            animation: rotate-slow 10s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            margin: 15px 0;
+            padding: 10px 0;
+            border-left: 3px solid #00ffff;
+            padding-left: 20px;
+            color: #ffffff;
+        }
+
+        .feature-list li:before {
+            content: "✨ ";
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        /* Research Section */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .research-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .research-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .research-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .research-card h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Innovation Section */
+        .innovation-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .innovation-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00ffff, #ff00ff);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .timeline-date {
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.2); }
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .photo-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.3), rgba(255, 0, 255, 0.3));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .upload-area {
+            border: 2px dashed #00ffff;
+            padding: 40px;
+            text-align: center;
+            border-radius: 15px;
+            background: rgba(0, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #ff00ff;
+        }
+
+        /* PDF Section */
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .pdf-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .pdf-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .pdf-icon {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        /* News & Updates */
+        .news-feed {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .news-item {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-date {
+            color: #00ffff;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .news-title {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #ffffff;
+        }
+
+        .news-content {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 15px 30px;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: #00ffff;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .overview-visual {
+                font-size: 5rem;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                margin: 20px 0;
+            }
+
+            .innovation-timeline::before {
+                left: 20px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">🤖 AI Voice & Gesture System</div>
+            <button class="back-btn" onclick="history.back()">← Back to Main</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI Voice & Gesture System</h1>
+            <p class="tagline">Intelligent Human-Computer Interaction for the Future</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Voice Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Gestures Supported</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Languages</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2024</span>
+                    <span class="stat-label">Project Started</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section class="section fade-in">
+        <h2>Project Overview</h2>
+        <div class="overview-grid">
+            <div class="overview-text">
+                <p>The AI Voice & Gesture System is a revolutionary human-computer interface that combines advanced voice recognition with computer vision-based gesture detection. This system enables natural, intuitive interaction with spacecraft systems and ground control interfaces.</p>
+                
+                <ul class="feature-list">
+                    <li>Real-time voice command processing</li>
+                    <li>Multi-modal gesture recognition</li>
+                    <li>Natural language understanding</li>
+                    <li>Adaptive learning algorithms</li>
+                    <li>Emergency voice override protocols</li>
+                    <li>Noise-resistant audio processing</li>
+                    <li>3D spatial gesture mapping</li>
+                    <li>Multi-language support</li>
+                </ul>
+            </div>
+            <div class="overview-visual">
+                🤖
+            </div>
+        </div>
+    </section>
+
+    <!-- Research & Development -->
+    <section class="section fade-in">
+        <h2>Research & Development</h2>
+        <div class="research-grid">
+            <div class="research-card">
+                <div class="research-icon">🎯</div>
+                <h3>Voice Recognition Engine</h3>
+                <p>Developed custom neural networks for high-accuracy voice recognition in noisy environments. Achieved 95% accuracy even in spacecraft ambient noise conditions.</p>
+            </div>
+            
+            <div class="research-card">
+                <div class="research-icon">👋</div>
+                <h3>Gesture Detection Algorithm</h3>
+                <p>Computer vision algorithms using MediaPipe and custom CNN models for real-time hand gesture recognition. Supports 20+ distinct gestures.</p>
+            </div>
+            
+            <div class="research-card">
+                <div class="research-icon">🧠</div>
+                <h3>Natural Language Processing</h3>
+                <p>Integrated transformer-based models for understanding complex voice commands and converting them into actionable system instructions.</p>
+            </div>
+            
+            <div class="research-card">
+                <div class="research-icon">⚡</div>
+                <h3>Real-time Processing</h3>
+                <p>Optimized algorithms for ultra-low latency processing, ensuring immediate response to critical voice commands and gestures.</p>
+            </div>
+            
+            <div class="research-card">
+                <div class="research-icon">🔒</div>
+                <h3>Security Protocols</h3>
+                <p>Biometric voice authentication and gesture signature verification to prevent unauthorized system access.</p>
+            </div>
+            
+            <div class="research-card">
+                <div class="research-icon">🌐</div>
+                <h3>Multi-modal Integration</h3>
+                <p>Seamless integration of voice and gesture inputs for enhanced user experience and system reliability.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovation Timeline -->
+    <section class="section fade-in">
+        <h2>Innovation Timeline</h2>
+        <div class="innovation-timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">January 2024</div>
+                    <h3>Project Initiation</h3>
+                    <p>Started research on voice recognition systems for spacecraft applications. Initial prototype development began with basic Python voice processing.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">March 2024</div>
+                    <h3>Gesture Recognition Integration</h3>
+                    <p>Added computer vision capabilities using OpenCV and MediaPipe. Successfully implemented basic hand gesture detection.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">June 2024</div>
+                    <h3>AI Model Enhancement</h3>
+                    <p>Integrated machine learning models for improved accuracy. Custom training on aerospace-specific vocabulary and commands.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">September 2024</div>
+                    <h3>Multi-language Support</h3>
+                    <p>Added Hindi and English language support. Implemented cultural gesture recognition for better accessibility.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">December 2024</div>
+                    <h3>System Integration</h3>
+                    <p>Successfully integrated with OFS spacecraft control systems. Completed testing in simulated space environment conditions.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Current - 2025</div>
+                    <h3>Advanced Features</h3>
+                    <p>Developing emotion recognition, stress detection, and predictive command suggestions for enhanced human-machine interaction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="section fade-in">
+        <h2>Project Photos & Development</h2>
+        <div class="photo-gallery">
+            <div class="photo-item">
+                <div class="photo-placeholder">📸</div>
+                <h4>Voice Recognition Setup</h4>
+                <p>Development environment with microphone array testing</p>
+            </div>
+            
+            <div class="photo-item">
+                <div class="photo-placeholder">🎥</div>
+                <h4>Gesture Testing</h4>
+                <p>Hand gesture recognition calibration process</p>
+            </div>
+            
+            <div class="photo-item">
+                <div class="photo-placeholder">💻</div>
+                <h4>AI Model Training</h4>
+                <p>Neural network training session in progress</p>
+            </div>
+            
+            <div class="photo-item">
+                <div class="photo-placeholder">🔧</div>
+                <h4>Hardware Integration</h4>
+                <p>Connecting sensors and processing units</p>
+            </div>
+        </div>
+        
+        <div class="upload-area" onclick="document.getElementById('photoUpload').click()">
+            <input type="file" id="photoUpload" multiple accept="image/*" style="display: none;">
+            <h3>📷 Upload Project Photos</h3>
+            <p>Click here to add your project photos and documentation</p>
+        </div>
+    </section>
+
+    <!-- PDF Notes & Documentation -->
+    <section class="section fade-in">
+        <h2>Research Notes & Documentation</h2>
+        <div class="pdf-grid">
+            <div class="pdf-item">
+                <div class="pdf-icon">📋</div>
+                <h3>Project Proposal</h3>
+                <p>Initial project proposal with objectives, methodology, and expected outcomes.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+            
+            <div class="pdf-item">
+                <div class="pdf-icon">📊</div>
+                <h3>Technical Specifications</h3>
+                <p>Detailed technical documentation of system architecture and components.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+            
+            <div class="pdf-item">
+                <div class="pdf-icon">📈</div>
+                <h3>Performance Analysis</h3>
+                <p>Test results, benchmarks, and performance optimization reports.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+            
+            <div class="pdf-item">
+                <div class="pdf-icon">🔬</div>
+                <h3>Research Papers</h3>
+                <p>Collection of research papers and academic references used in development.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+            
+            <div class="pdf-item">
+                <div class="pdf-icon">📝</div>
+                <h3>User Manual</h3>
+                <p>Comprehensive user guide for system operation and troubleshooting.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+            
+            <div class="pdf-item">
+                <div class="pdf-icon">🚀</div>
+                <h3>Future Roadmap</h3>
+                <p>Planned improvements, feature additions, and long-term development goals.</p>
+                <button class="download-btn">📥 Download PDF</button>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn">📁 Upload Research Notes</button>
+            <button class="action-btn">📄 Generate Report</button>
+            <button class="action-btn">💾 Export All Documents</button>
+        </div>
+    </section>
+
+    <!-- Latest News & Updates -->
+    <section class="section fade-in">
+        <h2>Latest News & Updates</h2>
+        <div class="news-feed">
+            <div class="news-item">
+                <div class="news-date">January 15, 2025</div>
+                <h3 class="news-title">🎉 Major Breakthrough in Gesture Recognition</h3>
+                <p class="news-content">Successfully achieved 98% accuracy in gesture recognition under varying lighting conditions. New algorithm adapts to different hand sizes and skin tones automatically.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-date">January 10, 2025</div>
+                <h3 class="news-title">🚀 Integration with OFS3 System</h3>
+                <p class="news-content">Voice and gesture system successfully integrated with OFS3 spacecraft control interface. Astronaut training modules now include natural interaction protocols.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-date">December 28, 2024</div>
+                <h3 class="news-title">🏆 Research Recognition</h3>
+                <p class="news-content">Project received recognition from local aerospace community. Featured in upcoming tech conference on Human-Computer Interaction in Space Applications.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-date">December 20, 2024</div>
+                <h3 class="news-title">🔊 Multi-language Voice Commands</h3>
+                <p class="news-content">Added support for Sanskrit commands alongside Hindi and English. Cultural gesture library expanded with traditional Indian hand gestures for enhanced accessibility.</p>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-date">December 15, 2024</div>
+                <h3 class="news-title">🧠 AI Model Optimization</h3>
+                <p class="news-content">Reduced model size by 40% while maintaining accuracy. System now runs efficiently on embedded hardware suitable for spacecraft applications.</p>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn">📰 Add News Update</button>
+            <button class="action-btn">📢 Share Achievement</button>
+            <button class="action-btn">📊 View Analytics</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: rgba(0, 0, 0, 0.9); text-align: center; padding: 40px 0; border-top: 1px solid rgba(0, 255, 255, 0.3);">
+        <p>&copy; 2025 Jeet Kumar Sahu - AI Voice & Gesture System Project 🤖</p>
+        <p style="margin-top: 10px; color: #cccccc;">Building the future of human-computer interaction for space exploration</p>
+    </footer>
+
+    <script>
+        // Create floating particles
+        function createFloatingParticles() {
+            const particleCount = 100;
+            const particles = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement("div");
+                particle.className = "particle";
+                document.body.appendChild(particle);
+                particles.push(particle);
+            }
+
+            animateParticles(particles);
+        }
+
+        // Animate particles
+        function animateParticles(particles) {
+            particles.forEach(particle => {
+                particle.style.left = Math.random() * window.innerWidth + "px";
+                particle.style.top = Math.random() * window.innerHeight + "px";
+                particle.style.opacity = Math.random();
+
+                // Add floating animation
+                particle.animate([
+                    { transform: "translateY(0)" },
+                    { transform: "translateY(-20px)" },
+                    { transform: "translateY(0)" }
+                ], {
+                    duration: 2000,
+                    easing: "ease-in-out",
+                    iterations: Infinity
+                });
+            });
+        }
+
+        // Start particle creation
+        createFloatingParticles();
+    </script>
+    <script>
+        // Scroll animations
+        const fadeInElements = document.querySelectorAll('.fade-in');
+
+        function checkVisibility() {
+            const triggerBottom = window.innerHeight / 5 * 4;
+
+            fadeInElements.forEach(element => {
+                const boxTop = element.getBoundingClientRect().top;
+
+                if (boxTop < triggerBottom) {
+                    element.classList.add('visible');
+                } else {
+                    element.classList.remove('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkVisibility);
+        window.addEventListener('load', checkVisibility);
+    </script>
+</body>
+</html>
